@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/meta') %>
+<body class="d-flex flex-column min-vh-100">
+    <%- include('partials/header') %>
+    <h1>COmplete the survey below</h1>
+    <form action="/getInfo" method="post">
+        Name: <input type="text" name="studentName" id=""> <br>
+        Major: <select name="major" id="">
+            <option value="CS">Computer Science</option>
+            <option value="EN">English</option>
+            <option value="PH">Physics</option>
+            
+        </select> <br>
+        Graduate Student ? 
+        <input type="checkbox" name="isGraduate" id=""> <br>
+        Pronouns
+        <input type="radio" name="pronoun" value="1" id=""> He/Him
+        <input type="radio" name="pronoun" value="2" id=""> She/Her
+        <input type="radio" name="pronoun" value="3" id=""> They/Them
+            <br>
+        Hobbies    <select name="hobbies" id="" multiple>
+            <option value="photo">Photography</option>
+            <option value="football">Football</option>
+            <option value="blog">Blogging</option>
+            
+        </select> <br>
+        <input type="submit" value="Submit"> 
+        </form>
+        <%- include('partials/footer') %>
+</body>
+</html>
