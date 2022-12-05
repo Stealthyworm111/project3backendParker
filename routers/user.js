@@ -13,17 +13,17 @@ router.post('/register', async (req, res) => {
     let email  = req.body.email
     
 
-
     try {
         password = await bcrypt.hash(password,8)
-        const user = new User({username,password,email})
+        const user = new User({username,email,password})
         const u = await user.save()
         res.json({message:'Successful Registration'})
     
     
         
     } catch (e) {
-        res.json({message,e})
+        console.log(e)
+        res.json({message:e})
     }
     
 })

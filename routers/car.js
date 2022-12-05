@@ -180,14 +180,13 @@ router.post('/listcar/:id', async (req, res) => {
             ownerAddress = resLoc.message
             if(model != "" && make != "" && miles != "" && description != "" && imageURL != "" && ownerAddress != "" && owner!= ""&&price !=""){
                 let c = new Car({make,model,miles,price,description,imageURL,ownerAddress,owner})
-                res.send(c)
-            // c.save((error,result)=>{
-            //     if(error)
-            //     res.json({error:error})
-            //     else
-            //          res.json({message:result})
+            c.save((error,result)=>{
+                if(error)
+                res.json({error:error})
+                else
+                     res.json({message:result})
             
-            // })
+            })
          }
          else
             res.json({message:"Invalid Data"})
