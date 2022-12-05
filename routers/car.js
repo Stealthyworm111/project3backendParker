@@ -125,7 +125,7 @@ router.post('/editcar/:Userid/:Carid', async (req, res) => {
     let make = req.body.make
     let miles = req.body.miles
     let description = req.body.description
-    let imageURL = req.body.description
+    let imageURL = req.body.imageURL
     let ownerAddress = req.body.ownerAddress
     let price = req.body.price
     if(re.test(ownerAddress)==false)
@@ -159,7 +159,7 @@ router.post('/listcar/:id', async (req, res) => {
     let make = req.body.make
     let miles = req.body.miles
     let description = req.body.description
-    let imageURL = req.body.description
+    let imageURL = req.body.imageURL
     let ownerAddress = req.body.ownerAddress
     let owner = req.params.id
     let price = req.body.price
