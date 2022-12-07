@@ -68,22 +68,45 @@ app.post('/login', async (req, res) => {
     if (!user) {
         res.json({message:'User not found. Incorrect Username'})
     }
+    else{
     //step 2
     const isMatch = await bcrypt.compare(password,user.password)
-
     //step 3
     console.log(isMatch)
     if (isMatch){
-        //req.session.user_id = user._id
+        req.auth = user._id
         res.send(user)
     }
-    else
-        res.json({message:'Error Incorrect Password'})
+    else{
+        res.json({message:'Error Incorrect Password'})}
 }
-else{
-    res.json({message:'Invalid Username or Password'})
-}
-
-
+    }
+    else{
+        res.json({message:'Please Provide username and password'})
+    }
 })
+
+app.post('/hello', authenticateUser,async (req, res) => {
+
+    console.log("Hello")
+})
+
+async function authenticateUser(req,res,next){
+    {
+        try {
+            const user = await User.findById(req.body.auth)
+            req.user = user
+            if(req.user != undefined)
+            next()
+            else
+            return res.send('Unauthorized User')
+        }
+        catch(e){
+            if(e.name =='CastError'){
+                res.send('Unauthorized User')
+            }
+        }
+        
+    }
+}
 

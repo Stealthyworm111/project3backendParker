@@ -64,62 +64,29 @@ router.post('/car',(req,res)=>{
     if(maxPrice == undefined){
         maxPrice = ""
     }
-
-
-    
    
     Car.find((error,cars)=>{
         let allCars=[] = cars
         if(error)
             res.send({message:error})
         else{
-            for (let car of allCars){
-                if(make != ""){
-                    if(!make.equalsIgnoreCase(car.make)){
-                        allCars.splice(allCars.indexOf(car),1)
-                }
-            }
-            }
-            for (let car of allCars){
-                if(model != ""){
-                    if(!model.equalsIgnoreCase(car.model)){
-                        console.log(car.model)
-                        allCars.splice(allCars.indexOf(car),1)
-                    }
-                }
-            }
-            for (let car of allCars){
-                if(maxMiles != ""){
-                    if(!(car.miles<maxMiles)){
-                    allCars.splice(allCars.indexOf(car),1)
-                    }
-                }
-            }
-            for (let car of allCars){
-                if(minPrice != ""){
-                    if(!(car.price>minPrice)){
-                        console.log(minPrice)
-                    allCars.splice(allCars.indexOf(car),1)
-                    }
-                }
-            }
-            for (let car of allCars){
-                if(maxPrice != ""){
-                    console.log(car.price>maxPrice)
-                    if((car.price>maxPrice) == true){
-                    allCars.splice(allCars.indexOf(car))
-                    }
-                }
-            }      
+            if(make != "")
+                allCars = allCars.filter(car =>car.make.equalsIgnoreCase(make))
+            if(model != "")
+                allCars = allCars.filter(car =>car.model.equalsIgnoreCase(model))
+            if(maxMiles != "")
+                allCars = allCars.filter(car =>car.miles <maxMiles)
+            if(minPrice != "")
+                allCars = allCars.filter(car =>car.price >minPrice)
+            if(maxPrice != "")
+                allCars = allCars.filter(car =>car.price <maxPrice)
             
-            
-                
             }
         res.send(allCars)
     })
 })
 
-router.post('/editcar/:Userid/:Carid', async (req, res) => {
+router.post('/editcar/:Userid/:Carid' ,authenticateUser, async (req, res) => {
     const re = /^([A-Z]|[a-z]|[0-9])/    
     let model = req.body.model
     let make = req.body.make
@@ -153,7 +120,7 @@ router.post('/editcar/:Userid/:Carid', async (req, res) => {
 
 
 
-router.post('/listcar/:id', async (req, res) => {
+router.post('/listcar/:id', authenticateUser,async (req, res) => {
     const re = /^([A-Z]|[a-z]|[0-9])/    
     let model = req.body.model
     let make = req.body.make
@@ -202,7 +169,7 @@ else
 })
 
 
-router.delete('/cars/:id',(req,res)=>{
+router.delete('/cars/:id',authenticateUser,(req,res)=>{
     Car.findByIdAndDelete(req.params.id,(error,response)=>{
         if(error)
             res.send({error:error})
@@ -263,5 +230,23 @@ function getGeo(name, cb){
 
 String.prototype.equalsIgnoreCase = function (compareString) { return this.toString().toUpperCase() === compareString.toString().toUpperCase(); 
 }; 
+async function authenticateUser(req,res,next){
+    {
+        try {
+            const user = await User.findById(req.body.auth)
+            req.user = user
+            if(req.user != undefined)
+            next()
+            else{
+            return res.send('Unauthorized User')}
+        }
+        catch(e){
+            if(e.name =='CastError'){
+                res.send('Unauthorized User')
+            }
+        }
+        
+    }
+}
 
 module.exports = router
