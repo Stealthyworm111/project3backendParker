@@ -78,7 +78,7 @@ router.get('/users',(req,res)=>{
                 u.cars = u.cars
                 allusers.push(u)
             }
-            res.send(allusers)
+            res.send({users:allusers})
             
            
 
