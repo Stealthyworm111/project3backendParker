@@ -82,7 +82,7 @@ router.post('/car',(req,res)=>{
                 allCars = allCars.filter(car =>car.price <maxPrice)
             
             }
-        res.send(allCars)
+        res.send({cars:allCars})
     })
 })
 

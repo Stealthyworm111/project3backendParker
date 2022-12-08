@@ -1,5 +1,5 @@
 
-//require('dotenv').config()
+require('dotenv').config()
 
 //just setting up the server with 
 const express = require("express")

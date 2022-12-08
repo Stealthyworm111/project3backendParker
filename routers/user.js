@@ -57,7 +57,6 @@ router.get('/users/:id',(req,res)=>{
         if(error)
             res.send({error:error})
         else{
-            
             console.log(user)
             res.json({message:user})
         }
