@@ -1,5 +1,7 @@
 
 //require('dotenv').config()
+
+//just setting up the server with 
 const express = require("express")
 const path = require('path')
 const mongoose = require('mongoose')
@@ -75,7 +77,7 @@ app.post('/login', async (req, res) => {
     console.log(isMatch)
     if (isMatch){
         req.auth = user._id
-        res.send(user)
+        res.send({user:user})
     }
     else{
         res.json({message:'Error Incorrect Password'})}
@@ -87,7 +89,6 @@ app.post('/login', async (req, res) => {
 })
 
 app.post('/hello', authenticateUser,async (req, res) => {
-
     console.log("Hello")
 })
 

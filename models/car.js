@@ -1,4 +1,4 @@
-
+//simple schema for the car.js
 const mongoose = require('mongoose')
 const carSchema  = new mongoose.Schema({
     make:{type:String, required:true},

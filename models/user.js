@@ -1,4 +1,4 @@
-
+//schema for the user 
 const mongoose = require('mongoose')
 const Car = require('./car')
 
@@ -8,6 +8,7 @@ const userSchema = new  mongoose.Schema({
     password:{type:String, unique:true}
 })
 
+//makes the id of the user a link to the owner of the car
 userSchema.virtual('cars',{
     ref:'Car',
     localField:'_id',
@@ -22,22 +23,19 @@ userSchema.set('toJSON',{virtuals:true})
 //     next()
 // })
 
-userSchema.post('findOneAndDelete',function(user){
-    console.log("Inside post hook for delete")
-    if(user){
-        Post.deleteMany({author:user._id},(error,result)=>{
-            //console.log(result)
-            if(error)
-                console.log("error is",error)
-            else
-                console.log("result is",result)
-        })
-    }
+// userSchema.post('findOneAndDelete',function(user){
+//     console.log("Inside post hook for delete")
+//     if(user){
+//         Post.deleteMany({author:user._id},(error,result)=>{
+//             //console.log(result)
+//             if(error)
+//                 console.log("error is",error)
+//             else
+//                 console.log("result is",result)
+//         })
+//     }
     
-})
+// })
 
 const User = mongoose.model('User',userSchema,'users')
-
-
-
 module.exports = User
