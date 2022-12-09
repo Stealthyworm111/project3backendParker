@@ -169,7 +169,7 @@ else
 })
 
 
-router.delete('/cars/:id',authenticateUser,(req,res)=>{
+router.delete('/cars/:id',authenticateUser2,(req,res)=>{
     Car.findByIdAndDelete(req.params.id,(error,response)=>{
         if(error)
             res.send({error:error})
@@ -234,6 +234,25 @@ async function authenticateUser(req,res,next){
     {
         try {
             const user = await User.findById(req.body.auth)
+            req.user = user
+            if(req.user != undefined)
+            next()
+            else{
+            return res.send('Unauthorized User')}
+        }
+        catch(e){
+            if(e.name =='CastError'){
+                res.send('Unauthorized User')
+            }
+        }
+        
+    }
+}
+
+async function authenticateUser2(req,res,next){
+    {
+        try {
+            const user = await User.findById(req.query.auth)
             req.user = user
             if(req.user != undefined)
             next()
