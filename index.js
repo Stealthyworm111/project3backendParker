@@ -34,30 +34,7 @@ mongoose.connect(url,{
 
 },()=>console.log("Connected to DB"))
 
-// app.get('/dashboard', authenticateUser,async (req, res) => {
-
-  
-//     res.render('dashboard.ejs',{username:req.user.username})
-
-// })
-
-// async function authenticateUser(req,res,next){
-//     if(!req.session.user_id){
-//         console.log("Unauthorized user")
-//         return res.json({message})
-//     }
-//     else{
-//         try {
-//             const user = await User.findById(req.session.user_id)
-//             req.user = user
-//             next()
-//         }
-//         catch(e){
-//             res.json({message:e})
-//         }
-        
-//     }
-// }
+//login router
 
 app.post('/login', async (req, res) => {
 
@@ -87,27 +64,4 @@ app.post('/login', async (req, res) => {
         res.json({message:'Please Provide username and password'})
     }
 })
-
-app.post('/hello', authenticateUser,async (req, res) => {
-    console.log("Hello")
-})
-
-async function authenticateUser(req,res,next){
-    {
-        try {
-            const user = await User.findById(req.body.auth)
-            req.user = user
-            if(req.user != undefined)
-            next()
-            else
-            return res.send('Unauthorized User')
-        }
-        catch(e){
-            if(e.name =='CastError'){
-                res.send('Unauthorized User')
-            }
-        }
-        
-    }
-}
 

@@ -29,6 +29,7 @@ const router = new express.Router()
 //     })
 // })
 
+//router that gets the car based off the id
 
 router.get('/car/:id',(req,res)=>{
     let id = req.params.id
@@ -42,12 +43,16 @@ router.get('/car/:id',(req,res)=>{
     })
 })
 
+//router that gets all cars that match search criteria
+
 router.post('/car',(req,res)=>{
     let make = req.body.make
     let model = req.body.model
     let maxMiles = req.body.maxMiles
     let minPrice = req.body.minPrice
     let maxPrice = req.body.maxPrice
+
+    //if not provided then make it blank so it doesnt cause in error
 
     if(make == undefined){
         make = ""
@@ -64,7 +69,7 @@ router.post('/car',(req,res)=>{
     if(maxPrice == undefined){
         maxPrice = ""
     }
-   
+   //if it is blank then dont filter it of it is filled in then filter the array
     Car.find((error,cars)=>{
         let allCars=[] = cars
         if(error)
@@ -86,6 +91,8 @@ router.post('/car',(req,res)=>{
     })
 })
 
+//router that edits car with new information provided
+
 router.post('/editcar/:Userid/:Carid' ,authenticateUser, async (req, res) => {
     const re = /^([A-Z]|[a-z]|[0-9])/    
     let model = req.body.model
@@ -103,14 +110,11 @@ router.post('/editcar/:Userid/:Carid' ,authenticateUser, async (req, res) => {
                     return
                 }
                 else{
-                    ownerAddress = resLoc.message
-                    Car.findByIdAndUpdate(req.params.Carid,{'make':make,'model':model,'miles':miles,'description':description,'imageURL':imageURL,'ownerAddress':ownerAddress,'price':price},{ returnDocument: 'after' },(error,user)=>{
+                    let ownerCoordinate = resLoc.message
+                    Car.findByIdAndUpdate(req.params.Carid,{'make':make,'model':model,'miles':miles,'description':description,'imageURL':imageURL,'ownerAddress':ownerAddress,'ownerCoordinate':ownerCoordinate,'price':price},{ returnDocument: 'after' },(error,user)=>{
                         if(error)
                             res.send({error:error})
                         else{
-                            if(!user)
-                                res.send({error:"could not locate car "+req.params.Carid})
-                            else
                                 res.send({message:user})
                             }
                     })
@@ -118,7 +122,7 @@ router.post('/editcar/:Userid/:Carid' ,authenticateUser, async (req, res) => {
             })
 })
 
-
+//rotuer that lists the car by finding coordinates. Address must start with number of letter
 
 router.post('/listcar/:id', authenticateUser,async (req, res) => {
     const re = /^([A-Z]|[a-z]|[0-9])/    
@@ -131,7 +135,7 @@ router.post('/listcar/:id', authenticateUser,async (req, res) => {
     let owner = req.params.id
     let price = req.body.price
     if(re.test(ownerAddress)==true){
-    
+    //gets coords for map
     getGeo(ownerAddress,(error,resLoc)=>{
         if (error){
             res.send(err)
@@ -144,9 +148,9 @@ router.post('/listcar/:id', authenticateUser,async (req, res) => {
             }
             else
             {
-            ownerAddress = resLoc.message
-            if(model != "" && make != "" && miles != "" && description != "" && imageURL != "" && ownerAddress != "" && owner!= ""&&price !=""){
-                let c = new Car({make,model,miles,price,description,imageURL,ownerAddress,owner})
+            let ownerCoordinate = resLoc.message
+            if(model != "" && make != "" && miles != "" && description != "" && imageURL != "" && ownerAddress != "" && ownerCoordinate !=""&& owner!= ""&&price !=""){
+                let c = new Car({make,model,miles,price,description,imageURL,ownerAddress,ownerCoordinate,owner})
             c.save((error,result)=>{
                 if(error)
                 res.json({error:error})
@@ -168,7 +172,7 @@ else
    
 })
 
-
+//router that deletes cars
 router.delete('/cars/:id',authenticateUser2,(req,res)=>{
     Car.findByIdAndDelete(req.params.id,(error,response)=>{
         if(error)

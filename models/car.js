@@ -8,6 +8,7 @@ const carSchema  = new mongoose.Schema({
     description: {type:String,required:true},
     imageURL:{type:String,required:true},
     ownerAddress:{type:String, required:true},
+    ownerCoordinate:{type:String},
     owner:{type:mongoose.Schema.Types.ObjectId,ref:'User'}
 })
 

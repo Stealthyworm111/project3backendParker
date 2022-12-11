@@ -7,6 +7,7 @@ const router = new express.Router()
 
 const request = require('request')
 
+//rotuer that registers users
 router.post('/register', async (req, res) => {
     let username = req.body.username
     let password = req.body.password
@@ -28,29 +29,7 @@ router.post('/register', async (req, res) => {
     
 })
 
-// router.post('/users/dummy',(req,res)=>{
-//     createDummyData()
-//     User.find({}).populate('posts').exec((error,result)=>{
-//         if(error)
-//             res.send({error:error})
-//         else
-//             res.send(result)
-//     })
-// })
-
-// router.post('/users',(req,res)=>{
-//     const u = new User(req.body)
-//     u.save((error,response)=>{
-//         if(error)
-//                 res.send({error:error})
-//                 else{
-//                     console.log(response)
-                   
-//                     res.send(response)
-//                 }
-//     })
-// })
-
+//router that gets user based on ids
 router.get('/users/:id',(req,res)=>{
     
     User.findById(req.params.id).populate('cars').exec((error,user)=>{
@@ -64,7 +43,7 @@ router.get('/users/:id',(req,res)=>{
 })
 
 
-
+//gets all users
 router.get('/users',(req,res)=>{
     
     User.find({}).populate('cars').exec((error,users)=>{
@@ -85,7 +64,6 @@ router.get('/users',(req,res)=>{
     })
 })
 
-//getLocation('5271 Swan Creek Rd, Saginaw Mi,48609',onResult)
 
 function getLocation(location_name,cb){
     const geoPrefix='https://api.mapbox.com/geocoding/v5/mapbox.places/'
